@@ -1,0 +1,14 @@
+development:
+  app_key: ""
+  app_secret: ""
+  access_type: "app_folder"
+
+test:
+  app_key: ""
+  app_secret: ""
+  access_type: "app_folder"
+
+production:
+  app_key: ""
+  app_secret: ""
+  access_type: "app_folder"
