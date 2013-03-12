@@ -1,0 +1,33 @@
+<a href="#">Add</a>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Site</th>
+      <th style="width:150px;">Login</th>
+      <th style="width:150px;">Password</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>google.com</td>
+      <td>user@mail.com</td>
+      <td>
+        <a href="#" onclick="show(this);return false;">show</a>
+        <div style="display:none;">
+          <a href="#" onclick="hide(this);return false;">hide</a>
+          12345678
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<script type="text/javascript">
+  function show(elm) {
+    $(elm).hide().next().show();
+  }
+  function hide(elm) {
+    $(elm).parent().hide().prev().show();
+  }
+</script>
+<%= @file if @file %>
