@@ -37,7 +37,9 @@ class DropboxController < ApplicationController
       end
     end
     if found
-      @file = client.get_file('data')
+      file = client.get_file('data')
+      #csv_text = File.read('...')
+      @csv = CSV.parse(file, headers: true)
     else
       # upload new
       client.put_file('data', File.open('lib/data'))

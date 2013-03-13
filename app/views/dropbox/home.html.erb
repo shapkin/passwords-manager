@@ -9,17 +9,20 @@
     </tr>
   </thead>
   <tbody>
+    <% @csv.each do |row| -%>
+    <% data = row.to_hash -%>
     <tr>
-      <td>google.com</td>
-      <td>user@mail.com</td>
+      <td><%= data["site"] %></td>
+      <td><%= data["login"] %></td>
       <td>
         <a href="#" onclick="show(this);return false;">show</a>
         <div style="display:none;">
           <a href="#" onclick="hide(this);return false;">hide</a>
-          12345678
+          <%= data["password"] %>
         </div>
       </td>
     </tr>
+    <% end -%>
   </tbody>
 </table>
 <script type="text/javascript">
