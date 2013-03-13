@@ -1,4 +1,7 @@
-<a href="#">Add</a>
+<br>
+<div class="row">
+  <a href="#" class="pull-right">Add</a>
+</div>
 
 <table class="table">
   <thead>
@@ -6,6 +9,7 @@
       <th>Site</th>
       <th style="width:150px;">Login</th>
       <th style="width:150px;">Password</th>
+      <th style="width:15px;"></th>
     </tr>
   </thead>
   <tbody>
@@ -13,24 +17,52 @@
     <% data = row.to_hash -%>
     <tr>
       <td><%= data["site"] %></td>
-      <td><%= data["login"] %></td>
       <td>
-        <a href="#" onclick="show(this);return false;">show</a>
+        <%= data["login"] %>
+        <a class="copylogin" title="copy to clipboard" href="#" pw="<%= data["login"] %>">
+          <img alt="" src="<%= asset_path("clipboard.png") %>" width="20px" />
+        </a>
+      </td>
+      <td>
+        <a class="showpw" href="#">show</a>
+        <a class="copypw" title="copy to clipboard" href="#" pw="<%= data["password"] %>">
+          <img alt="" src="<%= asset_path("clipboard.png") %>" width="20px" />
+        </a>
         <div style="display:none;">
-          <a href="#" onclick="hide(this);return false;">hide</a>
+          <a class="hidepw" href="#">hide</a>
           <%= data["password"] %>
         </div>
       </td>
+      <td>del</td>
     </tr>
     <% end -%>
+    <tr>
+      <td colspan="4">
+        <%= form_tag 'dropbox/create', class: 'form-inline' do -%>
+          <%= text_field_tag :site, nil, placeholder: 'site' %>
+          <%= text_field_tag :login, nil, placeholder: 'login' %>
+          <%= text_field_tag :password, nil, placeholder: 'password' %>
+          <a class="generatepw" title="generate" href="#"><img
+            alt="" src="<%= asset_path("games.png") %>" width="30px" /></a>
+          <%= submit_tag 'Save', class: 'btn' %>
+        <% end -%>
+      </td>
+    </tr>
   </tbody>
 </table>
 <script type="text/javascript">
-  function show(elm) {
-    $(elm).hide().next().show();
-  }
-  function hide(elm) {
-    $(elm).parent().hide().prev().show();
-  }
+  $(function() {
+    $('.showpw').click(function() {
+      $(this).hide().next().hide().next().show();
+      return false;
+    });
+    $('.copypw, .copylogin').click(function() {
+      window.prompt("Copy to clipboard: Ctrl+C, Enter", $(this).attr('pw'));
+      return false;
+    });
+    $('.hidepw').click(function() {
+      $(this).parent().hide().prev().show().prev().show();
+      return false;
+    });
+  });
 </script>
-<%= @file if @file %>
