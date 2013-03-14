@@ -1,53 +1,49 @@
 <br>
 <div class="row">
-  <a href="#" class="pull-right">Add</a>
+  <a href="#" class="pull-right" onclick="$('#add-new').show();return false;">Add New</a>
 </div>
+
+<%= form_tag 'dropbox/create', id: 'add-new', class: 'form-inline', style: 'display:none;' do -%>
+  <%= text_field_tag :site, nil, placeholder: 'site' %>
+  <%= text_field_tag :login, nil, placeholder: 'login' %>
+  <%= text_field_tag :password, nil, placeholder: 'password' %>
+  <a class="generatepw" title="generate" href="#"><img
+    alt="" src="<%= asset_path("games.png") %>" width="30px" /></a>
+  <%= submit_tag 'Save', class: 'btn' %>
+<% end -%>
 
 <table class="table">
   <thead>
     <tr>
       <th>Site</th>
       <th style="width:150px;">Login</th>
-      <th style="width:150px;">Password</th>
+      <th style="width:170px;">Password</th>
       <th style="width:15px;"></th>
     </tr>
   </thead>
   <tbody>
     <% @csv.each do |row| -%>
-    <% data = row.to_hash -%>
     <tr>
-      <td><%= data["site"] %></td>
+      <td><%= row[0] %></td>
       <td>
-        <%= data["login"] %>
-        <a class="copylogin" title="copy to clipboard" href="#" pw="<%= data["login"] %>">
+        <%= row[1] %>
+        <a class="copylogin" title="copy to clipboard" href="#" pw="<%= row[1] %>">
           <img alt="" src="<%= asset_path("clipboard.png") %>" width="20px" />
         </a>
       </td>
       <td>
         <a class="showpw" href="#">show</a>
-        <a class="copypw" title="copy to clipboard" href="#" pw="<%= data["password"] %>">
+        <a class="copypw" title="copy to clipboard" href="#" pw="<%= row[2] %>">
           <img alt="" src="<%= asset_path("clipboard.png") %>" width="20px" />
         </a>
         <div style="display:none;">
           <a class="hidepw" href="#">hide</a>
-          <%= data["password"] %>
+          <%= row[2] %>
         </div>
       </td>
       <td>del</td>
     </tr>
     <% end -%>
-    <tr>
-      <td colspan="4">
-        <%= form_tag 'dropbox/create', class: 'form-inline' do -%>
-          <%= text_field_tag :site, nil, placeholder: 'site' %>
-          <%= text_field_tag :login, nil, placeholder: 'login' %>
-          <%= text_field_tag :password, nil, placeholder: 'password' %>
-          <a class="generatepw" title="generate" href="#"><img
-            alt="" src="<%= asset_path("games.png") %>" width="30px" /></a>
-          <%= submit_tag 'Save', class: 'btn' %>
-        <% end -%>
-      </td>
-    </tr>
   </tbody>
 </table>
 <script type="text/javascript">
@@ -63,6 +59,18 @@
     $('.hidepw').click(function() {
       $(this).parent().hide().prev().show().prev().show();
       return false;
+    });
+    $('.generatepw').click(function() {
+      var possible = "0123456789abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      var pw = '';
+      while (pw.length < 15) {
+        var rnum = Math.floor(Math.random() * possible.length);
+        var symbol = possible.substring(rnum, rnum + 1);
+        if(pw.indexOf(symbol) == -1) {
+          pw += symbol;
+        }
+      }
+      $(this).prev().val(pw);
     });
   });
 </script>

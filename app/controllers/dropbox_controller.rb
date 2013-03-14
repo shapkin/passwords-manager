@@ -1,5 +1,4 @@
 require 'dropbox_sdk'
-require 'csv'
 
 class DropboxController < ApplicationController
   before_filter :check_session, exept: :authorize
@@ -23,29 +22,18 @@ class DropboxController < ApplicationController
   end
 
   def home
-    dbsession = DropboxSession.deserialize(session[:dropbox_session])
-    client = DropboxClient.new(dbsession, Dropbox::ACCESS_TYPE) #raise an exception if session not authorized
-    info = client.account_info # look up account information
-
-    found = false
-    results = client.search('', 'data')
-    for i in 0..results.size-1
-      if results[i]["path"] == '/data'
-        found = true
-        break
-      end
-    end
-    if found
-      file = client.get_file('data')
-      @csv = CSV.parse(file, headers: true)
-    else
-      # upload new
-      client.put_file('data', File.open('lib/data'))
-    end
+    @csv = DataContainer.load_data(session)
   end
 
   def create
+    errors = ''
+    errors += '<div>Site is required.</div>' if params[:site].empty?
+    errors += '<div>Login is required.</div>' if params[:login].empty?
+    errors += '<div>Password is required.</div>' if params[:password].empty?
+    redirect_to :home, flash: { error: errors } unless errors.empty?
 
+    DataContainer.save_data(session, params[:site], params[:login], params[:password])
+    redirect_to :home, flash: { success: 'Site added.' }
   end
 
   private
