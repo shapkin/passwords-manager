@@ -1,0 +1,19 @@
+development:
+  adapter: mysql2
+  database: passwords_manager_development
+  username: root
+  password: "1234"
+
+test:
+  adapter: mysql2
+  database: passwords_manager_test
+  username: root
+  password: "1234"
+
+production:
+  host: ""
+  adapter: postgresql
+  database: ""
+  username: ""
+  password: ""
+  port: 5432
